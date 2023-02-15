@@ -64,30 +64,42 @@ def split_network_medium(ip_network):
         'public-a': subnets_public[0],
         'public-b': subnets_public[1],
         'public-c': subnets_public[2],
-        'public-reserved': subnets_public[3],
+        'public-d': subnets_public[3],
         'data-a': subnets_data[0],
         'data-b': subnets_data[1],
         'data-c': subnets_data[2],
-        'data-reserved': subnets_data[3],
+        'data-d': subnets_data[3],
         'private-a': subnets_private[0],
         'private-b': subnets_private[1],
         'private-c': subnets_private[2],
-        'private-reserved': subnets_private[3]
+        'private-d': subnets_private[3]
     }
 
-    pprint.pprint(network_map)
+    # pprint.pprint(network_map)
+    print_subnets(network_map)
 
 
-def main():
-    # f = open('account_info.json')
-    # vpc_data = json.load(f)
-    # sort_networks(vpc_data=vpc_data)
-
-    # print('--small network--')
-    # split_network_small(ipaddress.ip_network('172.16.0.0/22'))
-
-    print('--medium network--')
-    split_network_medium(ipaddress.ip_network('10.128.0.0/21'))
+def print_subnets(subnet_map):
+    for k, v in subnet_map.items():
+        print(f"{k} - {v.network_address}/{v.prefixlen}")
 
 
-main()
+def split_network(network: ipaddress.ip_network):
+    if network.prefixlen == 22:
+        split_network_small(network)
+    elif network.prefixlen == 21:
+        split_network_medium(network)
+    else:
+        print('cidr didnt match valid prefix length')
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description='Split some CIDRs!!')
+
+    parser.add_argument(
+        '-c', '--cidr', help='the cidr of the vpc to break down. Must be a /21 or /22')
+
+    args = parser.parse_args()
+
+    split_network(ipaddress.ip_network(args.cidr))
