@@ -22,14 +22,11 @@ def sort_networks(vpc_data, remove_default_vpcs=True):
     for item in vpc_data:
         print(f"{item['account_name']} - {item['cidr']}")
 
+
 # Takes a cidr range and splits it into predefined subnet layout
 
 
-def split_network_small(ip_network):
-
-    # add validation for correct network size /22
-
-    network = ip_network
+def split_network_small(network: ipaddress.ip_network):
 
     subnets_top = list(network.subnets(2))
     subnets_public = list(subnets_top[0].subnets(1))
@@ -45,13 +42,10 @@ def split_network_small(ip_network):
         'private-b': subnets_private[1]
     }
 
-    pprint.pprint(network_map)
+    print_subnets(network_map)
 
 
-def split_network_medium(ip_network):
-
-    network = ip_network
-    # add validation for correct network size /21
+def split_network_medium(network: ipaddress.ip_network):
 
     subnets_top = list(network.subnets(2))
     subnets_public = list(subnets_top[0].subnets(2))
@@ -75,7 +69,6 @@ def split_network_medium(ip_network):
         'private-d': subnets_private[3]
     }
 
-    # pprint.pprint(network_map)
     print_subnets(network_map)
 
 
