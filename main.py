@@ -34,12 +34,9 @@ def split_network_small(network: ipaddress.ip_network):
     subnets_private = subnets_top[2:]
 
     network_map = {
-        'public-a': subnets_public[0],
-        'public-b': subnets_public[1],
-        'data-a': subnets_data[0],
-        'data-b': subnets_data[1],
-        'private-a': subnets_private[0],
-        'private-b': subnets_private[1]
+        'public': [subnets_public[0], subnets_public[1]],
+        'data': [subnets_data[0], subnets_data[1]],
+        'private': [subnets_private[0], subnets_private[1]]
     }
 
     print_subnets(network_map)
@@ -55,18 +52,9 @@ def split_network_medium(network: ipaddress.ip_network):
         subnets_private.append(item)
 
     network_map = {
-        'public-a': subnets_public[0],
-        'public-b': subnets_public[1],
-        'public-c': subnets_public[2],
-        'public-d': subnets_public[3],
-        'data-a': subnets_data[0],
-        'data-b': subnets_data[1],
-        'data-c': subnets_data[2],
-        'data-d': subnets_data[3],
-        'private-a': subnets_private[0],
-        'private-b': subnets_private[1],
-        'private-c': subnets_private[2],
-        'private-d': subnets_private[3]
+        'public': [subnets_public[0], subnets_public[1], subnets_public[2], subnets_public[3]],
+        'data': [subnets_data[0], subnets_data[1], subnets_data[2], subnets_data[3]],
+        'private': [subnets_private[0], subnets_private[1], subnets_private[2], subnets_private[3]]
     }
 
     print_subnets(network_map)
@@ -74,7 +62,10 @@ def split_network_medium(network: ipaddress.ip_network):
 
 def print_subnets(subnet_map):
     for k, v in subnet_map.items():
-        print(f"{k} - {v.network_address}/{v.prefixlen}")
+        print(f"{k}: ", end='')
+        for item in v:
+            print(f"{item.network_address}/{item.prefixlen}, ", end='')
+        print("")
 
 
 def split_network(network: ipaddress.ip_network):
